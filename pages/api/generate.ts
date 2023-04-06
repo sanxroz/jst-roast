@@ -21,7 +21,6 @@ const handler = async (req: Request): Promise<Response> => {
   // call Scraper API to get website text
   const scraperResponse = await fetch(`/api/scraper?url=${prompt}`);
   const { text } = await scraperResponse.json();
-  console.log(text);
   
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
