@@ -28,17 +28,22 @@ const Home: NextPage = () => {
     setGeneratedBios("");
     setLoading(true);
 
-    const webdata = await fetch(`/api/scraper?url=${encodeURIComponent(prompt)}`, {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
+    const webdata = await fetch(
+      `/api/scraper?url=${encodeURIComponent(prompt)}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!webdata.ok) {
       throw new Error(webdata.statusText);
     }
+
+    const webdatabody = await webdata.json();
+    console.log(webdatabody);
 
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -46,7 +51,7 @@ const Home: NextPage = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        webdata,
+        webdatabody,
       }),
     });
 
