@@ -10,8 +10,8 @@ export const config = {
   runtime: "edge",
 };
 
-const getTextFromUrl = async (url: string): Promise<string> => {
-  const response = await axios.get(url);
+const getTextFromUrl = async (prompt: string): Promise<string> => {
+  const response = await axios.get(prompt);
   const $ = cheerio.load(response.data);
   return $("body").text().trim();
 };
