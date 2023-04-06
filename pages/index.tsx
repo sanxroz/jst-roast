@@ -96,7 +96,7 @@ const Home: NextPage = () => {
             )}
             {loading && (
               <button
-                className="bg-black rounded-full text-white font-medium px-4 py-2 hover:bg-black/80 w-fit"
+                className="bg-[#222] shadow-[inset_0_2px_0_0_rgb(255,255,255,10%)] border border-[#000] rounded-full text-white font-medium px-4 py-2 hover:bg-[#222] w-fit"
                 disabled
               >
                 <LoadingDots color="white" style="large" />
