@@ -16,11 +16,12 @@ const handler = async (req: Request): Promise<Response> => {
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
   }
+  
 
   // call Scraper API to get website text
   const scraperResponse = await fetch(`/api/scraper?url=${prompt}`);
   const { text } = await scraperResponse.json();
-
+  
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
     messages: [

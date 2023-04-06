@@ -6,6 +6,7 @@ import { Toaster, toast } from "react-hot-toast";
 import Footer from "../components/Footer";
 import LoadingDots from "../components/LoadingDots";
 import Openkey from "../components/Openkey";
+import axios from "axios";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -20,44 +21,64 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `${bio}${bio.slice(-1) === "." ? "" : "."}`;
+  const prompt = `${bio}`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt,
-      }),
-    });
+    let generatedBio = "";
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
+    try {
+      // Scrape data from the user's Twitter bio
+      const scrapeResponse = await axios.post("/api/scrape", {
+        bio,
+      });
+
+      if (!scrapeResponse.data) {
+        throw new Error("Failed to scrape data from bio.");
+      }
+
+      // Generate bios using the scraped data
+      const generateResponse = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: scrapeResponse.data,
+        }),
+      });
+
+      if (!generateResponse.ok) {
+        throw new Error("Failed to generate bio.");
+      }
+
+      // This data is a ReadableStream
+      const data = generateResponse.body;
+      if (!data) {
+        return;
+      }
+
+      const reader = data.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+        generatedBio += chunkValue;
+      }
+
+      setGeneratedBios(generatedBio);
+      scrollToBios();
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to generate bio. Please try again.");
+      setLoading(false);
     }
-
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
-    }
-    scrollToBios();
-    setLoading(false);
   };
 
   return (
