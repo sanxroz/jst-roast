@@ -27,58 +27,53 @@ const Home: NextPage = () => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
-    let generatedBio = "";
 
-    try {
-      // Scrape data from the user's Twitter bio
-      const scrapeResponse = await axios.post("/api/scrape", {
-        bio,
-      });
+    const webdata = await fetch("/api/scraper", {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt,
+      }),
+    });
 
-      if (!scrapeResponse.data) {
-        throw new Error("Failed to scrape data from bio.");
-      }
-
-      // Generate bios using the scraped data
-      const generateResponse = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: scrapeResponse.data,
-        }),
-      });
-
-      if (!generateResponse.ok) {
-        throw new Error("Failed to generate bio.");
-      }
-
-      // This data is a ReadableStream
-      const data = generateResponse.body;
-      if (!data) {
-        return;
-      }
-
-      const reader = data.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        const chunkValue = decoder.decode(value);
-        generatedBio += chunkValue;
-      }
-
-      setGeneratedBios(generatedBio);
-      scrollToBios();
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to generate bio. Please try again.");
-      setLoading(false);
+    if (!webdata.ok) {
+      throw new Error(webdata.statusText);
     }
+
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        webdata,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    // This data is a ReadableStream
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      setGeneratedBios((prev) => prev + chunkValue);
+    }
+    scrollToBios();
+    setLoading(false);
   };
 
   return (
