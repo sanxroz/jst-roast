@@ -19,6 +19,17 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response("No prompt in the request", { status: 400 });
   }
 
+  axios
+    .get(prompt)
+    .then((response) => {
+      const $ = cheerio.load(response.data);
+      const allText = $("body").text();
+      console.log(allText);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
     messages: [
