@@ -1,4 +1,6 @@
 import { OpenAIStream, OpenAIStreamPayload } from "../../utils/OpenAIStream";
+import axios from "axios";
+import cheerio from "cheerio";
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
@@ -6,6 +8,12 @@ if (!process.env.OPENAI_API_KEY) {
 
 export const config = {
   runtime: "edge",
+};
+
+const getTextFromUrl = async (url: string): Promise<string> => {
+  const response = await axios.get(url);
+  const $ = cheerio.load(response.data);
+  return $("body").text().trim();
 };
 
 const handler = async (req: Request): Promise<Response> => {
@@ -17,9 +25,14 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response("No prompt in the request", { status: 400 });
   }
 
+  let text = "";
+  if (prompt) {
+    text += await getTextFromUrl(prompt);
+  }
+
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: prompt }],
+    messages: [{ role: "user", content: text }],
     temperature: 0.7,
     top_p: 1,
     frequency_penalty: 0,
