@@ -19,8 +19,7 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `Generate 2 twitter biographies with no hashtags and clearly labeled "1." and "2.".
-      Make sure each generated biography is less than 160 characters, has short sentences that are found in Twitter bios, and base them on this context: ${bio}${
+  const prompt = `${bio}${
     bio.slice(-1) === "." ? "" : "."
   }`;
 
@@ -121,7 +120,7 @@ const Home: NextPage = () => {
                   .map((generatedBio) => {
                     return (
                       <div
-                        className="text-[#efece6] transition border"
+                        className="text-[#efece6] font-bold transition"
                         key={generatedBio}
                       >
                         <p>{generatedBio}</p>
