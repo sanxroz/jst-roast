@@ -28,15 +28,13 @@ const Home: NextPage = () => {
     setGeneratedBios("");
     setLoading(true);
 
-    const webdata = await fetch("/api/scraper", {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt,
-      }),
-    });
+    const webdata = await fetch(`/api/scraper?url=${encodeURIComponent(prompt)}`, {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 
     if (!webdata.ok) {
       throw new Error(webdata.statusText);
