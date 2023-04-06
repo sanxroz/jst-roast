@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Footer from "../components/Footer";
 import LoadingDots from "../components/LoadingDots";
+import Openkey from "../components/Openkey";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -19,9 +20,7 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `${bio}${
-    bio.slice(-1) === "." ? "" : "."
-  }`;
+  const prompt = `${bio}${bio.slice(-1) === "." ? "" : "."}`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
@@ -68,6 +67,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Openkey />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
         <h1 className="sm:text-9xl text-[#efece6] text-4xl max-w-[708px] font-bold">
           Jst Roast
