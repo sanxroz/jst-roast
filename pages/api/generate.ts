@@ -10,12 +10,6 @@ export const config = {
   runtime: "edge",
 };
 
-const getTextFromUrl = async (prompt: string): Promise<string> => {
-  const response = await axios.get(prompt);
-  const $ = cheerio.load(response.data);
-  return $("body").text().trim();
-};
-
 const handler = async (req: Request): Promise<Response> => {
   const { prompt } = (await req.json()) as {
     prompt?: string;
@@ -25,14 +19,9 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response("No prompt in the request", { status: 400 });
   }
 
-  let text = "";
-  if (prompt) {
-    text += await getTextFromUrl(prompt);
-  }
-
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: text }],
+    messages: [{ role: "user", content: prompt }],
     temperature: 0.7,
     top_p: 1,
     frequency_penalty: 0,
