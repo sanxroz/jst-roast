@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRef, useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import Footer from "../components/Footer";
 import LoadingDots from "../components/LoadingDots";
 import Openkey from "../components/Openkey";
