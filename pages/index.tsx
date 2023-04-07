@@ -19,29 +19,26 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `${bio}`;
+  const url = `${bio}`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
 
-    const webdata = await fetch(
-      `/api/scraper?url=${encodeURIComponent(prompt)}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const webdata = await fetch(`/api/scraper?url=${encodeURIComponent(url)}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!webdata.ok) {
       throw new Error(webdata.statusText);
     }
 
-    const webdatabody = await webdata.json();
-    console.log(webdatabody);
+    const prompt = await webdata.json();
+    console.log(prompt);
 
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -49,7 +46,7 @@ const Home: NextPage = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        webdatabody,
+        prompt,
       }),
     });
 
