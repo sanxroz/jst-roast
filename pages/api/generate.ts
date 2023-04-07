@@ -16,12 +16,7 @@ const handler = async (req: Request): Promise<Response> => {
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
   }
-  
 
-  // call Scraper API to get website text
-  const scraperResponse = await fetch(`/api/scraper?url=${prompt}`);
-  const { text } = await scraperResponse.json();
-  
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
     messages: [
@@ -30,7 +25,7 @@ const handler = async (req: Request): Promise<Response> => {
         content:
           "Generate a humorous and entertaining roast of the text of a website that I provide, a roast that will make me laugh out loud!. No more than 400 characters. Give me 1 recommendation to improve the website",
       },
-      { role: "user", content: text },
+      { role: "user", content: prompt },
     ],
     temperature: 0.7,
     top_p: 1,
