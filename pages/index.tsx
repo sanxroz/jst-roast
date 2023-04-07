@@ -25,36 +25,32 @@ const Home: NextPage = () => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt,
-      }),
-    });
+
+    const response = await fetch(`/api/scraper?url=${encodeURIComponent(bio)}`);
 
     if (!response.ok) {
       throw new Error(response.statusText);
     }
 
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
+    const data = await response.json();
+
+    const generateResponse = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: data, // send the response from scraper.ts to generate.ts
+      }),
+    });
+
+    if (!generateResponse.ok) {
+      throw new Error(generateResponse.statusText);
     }
 
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
+    const generatedData = await generateResponse.json();
 
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
-    }
+    setGeneratedBios(generatedData);
     scrollToBios();
     setLoading(false);
   };
