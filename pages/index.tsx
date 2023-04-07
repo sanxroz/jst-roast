@@ -25,16 +25,14 @@ const Home: NextPage = () => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
-    const dataweb = await fetch(`/api/scraper?url=${bio}`)
-    const webjson = await dataweb.json()
-    
+
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        webjson,
+        prompt,
       }),
     });
 
