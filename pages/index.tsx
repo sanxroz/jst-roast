@@ -19,57 +19,38 @@ const Home: NextPage = () => {
     }
   };
 
-  const url = `${bio}`;
+  const prompt = `${bio}`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
 
-    const webdata = await fetch(`/api/scraper?url=${encodeURIComponent(url)}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!webdata.ok) {
-      throw new Error(webdata.statusText);
-    }
-
-    const prompt = await webdata.json();
-    console.log(prompt);
-
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt,
-      }),
-    });
+    const response = await fetch(`/api/scraper?url=${encodeURIComponent(bio)}`);
 
     if (!response.ok) {
       throw new Error(response.statusText);
     }
 
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
+    const data = await response.json();
+
+    const generateResponse = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: data, // send the response from scraper.ts to generate.ts
+      }),
+    });
+
+    if (!generateResponse.ok) {
+      throw new Error(generateResponse.statusText);
     }
 
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
+    const generatedData = await generateResponse.json();
 
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
-    }
+    setGeneratedBios(generatedData);
     scrollToBios();
     setLoading(false);
   };
