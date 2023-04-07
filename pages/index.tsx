@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import Footer from "../components/Footer";
 import LoadingDots from "../components/LoadingDots";
 import Openkey from "../components/Openkey";
+import ReactMarkdown from "react-markdown";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -123,7 +124,7 @@ const Home: NextPage = () => {
                         className="text-[#efece6] font-bold transition"
                         key={generatedBio}
                       >
-                        <p>{generatedBio}</p>
+                        <ReactMarkdown>{generatedBio}</ReactMarkdown>
                       </div>
                     );
                   })}
