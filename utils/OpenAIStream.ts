@@ -3,6 +3,9 @@ import {
   ParsedEvent,
   ReconnectInterval,
 } from "eventsource-parser";
+import { getInputValue } from "./localstorage";
+
+const inputValue = getInputValue();
 
 export type ChatGPTAgent = "user" | "system";
 
@@ -10,8 +13,6 @@ export interface ChatGPTMessage {
   role: ChatGPTAgent;
   content: string;
 }
-
-const storedValue = localStorage.getItem("inputValue");
 
 export interface OpenAIStreamPayload {
   model: string;
@@ -34,7 +35,7 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${storedValue ?? ""}`,
+      Authorization: `Bearer ${inputValue ?? ""}`,
     },
     method: "POST",
     body: JSON.stringify(payload),
