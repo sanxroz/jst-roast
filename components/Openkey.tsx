@@ -32,7 +32,7 @@ const Openkey: React.FC = () => {
     <div>
       {!showInput && (
         <button
-          className="px-5 text-[#efece6] py-2 border border-solid border-[#00000033] rounded-full bg-[#ffffff26] shadow-[inset_0_1px_0_0_rgb(255,255,255,10%)] hover:shadow"
+          className="px-5 text-[#efece6] py-2 border border-solid border-[#00000033] rounded-full bg-[#ffffff26] shadow-[inset_0_1px_0_0_rgb(255,255,255,10%)] hover:shadow-2xl"
           onClick={handleButtonClick}
         >
           OpenAI Key
@@ -40,7 +40,7 @@ const Openkey: React.FC = () => {
       )}
       {showInput && (
         <form
-          className="p-1.5 gap-1 rounded-full border bg-[#333] border-[#ffffff1a] flex"
+          className="p-1.5 gap-1 rounded-full text-[#efece6] py-2 border border-solid border-[#00000033] rounded-full bg-[#ffffff26] shadow-[inset_0_1px_0_0_rgb(255,255,255,10%)] flex"
           onSubmit={handleSubmit}
         >
           <input
