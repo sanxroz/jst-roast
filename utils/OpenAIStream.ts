@@ -29,14 +29,15 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
 
   let counter = 0;
 
+  let token = "";
+  if (typeof window !== "undefined") {
+    token = window.localStorage.getItem("inputValue") ?? "";
+  }
+
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${
-        typeof window !== "undefined"
-          ? window.localStorage.getItem("inputValue") ?? ""
-          : ""
-      }`,
+      Authorization: `Bearer ${token}`,
     },
     method: "POST",
     body: JSON.stringify(payload),
