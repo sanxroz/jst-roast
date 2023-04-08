@@ -6,14 +6,6 @@ import Footer from "../components/Footer";
 import LoadingDots from "../components/LoadingDots";
 import Openkey from "../components/Openkey";
 import ReactMarkdown from "react-markdown";
-import fs from "fs";
-
-const dotenv = require("dotenv-flow").config();
-
-const myVariableValue = localStorage.getItem("inputValue");
-if (myVariableValue) {
-  process.env.OPENAI_API_KEY = myVariableValue;
-}
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
