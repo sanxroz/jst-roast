@@ -4,15 +4,6 @@ import {
   ReconnectInterval,
 } from "eventsource-parser";
 
-export function getInputValue() {
-  if (typeof window !== "undefined") {
-    const storedValue = localStorage.getItem("inputValue");
-    console.log(storedValue); // Log the value to the console
-  }
-  const defaultValue = null;
-  return defaultValue;
-}
-
 export type ChatGPTAgent = "user" | "system";
 
 export interface ChatGPTMessage {
@@ -36,15 +27,16 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
 
-  const inputValue = getInputValue();
-  console.log(inputValue);
-
   let counter = 0;
 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${inputValue ?? ""}`,
+      Authorization: `Bearer ${
+        typeof window !== "undefined"
+          ? window.localStorage.getItem("inputValue") ?? ""
+          : ""
+      }`,
     },
     method: "POST",
     body: JSON.stringify(payload),
