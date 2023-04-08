@@ -5,8 +5,6 @@ import {
 } from "eventsource-parser";
 import { getInputValue } from "./localvariable";
 
-const inputValue = getInputValue();
-
 export type ChatGPTAgent = "user" | "system";
 
 export interface ChatGPTMessage {
@@ -29,6 +27,8 @@ export interface OpenAIStreamPayload {
 export async function OpenAIStream(payload: OpenAIStreamPayload) {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
+
+  const inputValue = getInputValue(); // get the value of inputValue
 
   let counter = 0;
 
