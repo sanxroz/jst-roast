@@ -23,21 +23,22 @@ export interface OpenAIStreamPayload {
   n: number;
 }
 
+let inputValue = "";
+if (typeof window !== "undefined") {
+  inputValue = localStorage.getItem("inputValue") ?? "";
+}
+console.log(inputValue);
+
 export async function OpenAIStream(payload: OpenAIStreamPayload) {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
 
   let counter = 0;
 
-  let token = "";
-  if (typeof window !== "undefined") {
-    token = window.localStorage.getItem("inputValue") ?? "";
-  }
-
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${inputValue ?? ""}`,
     },
     method: "POST",
     body: JSON.stringify(payload),
