@@ -11,6 +11,8 @@ export interface ChatGPTMessage {
   content: string;
 }
 
+const storedValue = localStorage.getItem("inputValue");
+
 export interface OpenAIStreamPayload {
   model: string;
   messages: ChatGPTMessage[];
@@ -32,7 +34,7 @@ export async function OpenAIStream(payload: OpenAIStreamPayload) {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY ?? ""}`,
+      Authorization: `Bearer ${storedValue ?? ""}`,
     },
     method: "POST",
     body: JSON.stringify(payload),
