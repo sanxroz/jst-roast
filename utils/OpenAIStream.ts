@@ -24,11 +24,11 @@ export interface OpenAIStreamPayload {
   n: number;
 }
 
-const inputValue = useInputValue();
-
 export async function OpenAIStream(payload: OpenAIStreamPayload) {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
+
+  const inputValue = useInputValue();
 
   let counter = 0;
 
