@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import LoadingDots from "../components/LoadingDots";
 import Openkey from "../components/Openkey";
 import ReactMarkdown from "react-markdown";
+import { useInputValue } from "../utils/apiget";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,9 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `${bio}`;
+  const inputvalue = useInputValue();
+
+  const prompt = bio + ";;" + inputvalue;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
@@ -76,7 +79,7 @@ const Home: NextPage = () => {
         <div className="max-w-xl w-full">
           <div className="flex mt-5 items-center space-x-1">
             <p className="text-center w-full text-[#efece6] font-medium">
-              Save your OpenAI key, and then ask for your
+              Save your OpenAI key, and then ask for your {prompt}
             </p>
           </div>
           <div className="p-1.5 gap-1 mt-5 rounded-full text-[#efece6] py-2 border border-solid border-[#00000033] rounded-full bg-[#333] shadow-[inset_0_1px_0_0_rgb(255,255,255,10%)] flex">
