@@ -17,7 +17,7 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response("No prompt in the request", { status: 400 });
   }
 
-  const [value, apiKey]: string[] = prompt.split(";;");
+  const [value, apiKey]: string[] = prompt.split("%%");
 
   const payload: OpenAIStreamPayload = {
     model: "gpt-3.5-turbo",
