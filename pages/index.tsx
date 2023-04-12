@@ -91,7 +91,7 @@ const Home: NextPage = () => {
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Head>
-        <title>Twitter Bio Generator</title>
+        <title>Jst Ideas</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -126,14 +126,16 @@ const Home: NextPage = () => {
           </form>
         )}
       </div>
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-        <h1 className="sm:text-9xl text-[#efece6] text-4xl max-w-[708px] font-bold">
-          Jst Roast
+      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:text sm:mt-20">
+        <h1 className="sm:text-9xl text-[#efece6] text-5xl max-w-[708px] font-bold">
+          Jst Ideas
         </h1>
         <div className="max-w-xl w-full">
           <div className="flex mt-5 items-center space-x-1">
             <p className="text-center w-full text-[#efece6] font-medium">
-              Save your OpenAI key, and then ask for your {prompt}
+              <p className="text-lg">N&W has begun, welcome to S3 dear folks</p>
+              Check if your idea worth it, add your OpenAI key above and tell us
+              what your idea is right here 👇!
             </p>
           </div>
           <div className="p-1.5 gap-1 mt-5 rounded-full text-[#efece6] py-2 border border-solid border-[#00000033] rounded-full bg-[#333] shadow-[inset_0_1px_0_0_rgb(255,255,255,10%)] flex">
