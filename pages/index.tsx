@@ -127,7 +127,7 @@ const Home: NextPage = () => {
         )}
       </div>
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:text sm:mt-20">
-        <h1 className="sm:text-9xl text-[#efece6] text-5xl max-w-[708px] font-bold">
+        <h1 className="sm:text-9xl text-[#efece6] text-7xl max-w-[708px] font-bold">
           Jst Ideas
         </h1>
         <div className="max-w-xl w-full">
@@ -170,7 +170,7 @@ const Home: NextPage = () => {
           toastOptions={{ duration: 2000 }}
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
-        <div className="space-y-10 my-10">
+        <div className="space-y-10 my-5 bg-[#ffffff0a] text-[#ffffffcc]">
           {generatedBios && (
             <>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
@@ -180,7 +180,7 @@ const Home: NextPage = () => {
                   .map((generatedBio) => {
                     return (
                       <div
-                        className="text-[#efece6] font-bold transition"
+                        className="text-[#efece6] font-medium transition"
                         key={generatedBio}
                       >
                         <ReactMarkdown>{generatedBio}</ReactMarkdown>
