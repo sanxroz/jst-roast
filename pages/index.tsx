@@ -170,7 +170,7 @@ const Home: NextPage = () => {
           toastOptions={{ duration: 2000 }}
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
-        <div className="space-y-10 my-5 bg-[#ffffff0a] text-[#ffffffcc]">
+        <div className="space-y-10 my-5 bg-[#ffffff0a] p-8 rounded-2xl text-[#ffffffcc]">
           {generatedBios && (
             <>
               <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
