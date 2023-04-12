@@ -1,16 +1,41 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import Footer from "../components/Footer";
 import LoadingDots from "../components/LoadingDots";
-import Openkey from "../components/Openkey";
 import ReactMarkdown from "react-markdown";
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
   const [generatedBios, setGeneratedBios] = useState<String>("");
+  const [inputValue, setInputValue] = useState("");
+  const [showInput, setShowInput] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedValue = localStorage.getItem("inputValue");
+      setInputValue(storedValue || "");
+    }
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("inputValue", newValue);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setShowInput(false);
+  };
+
+  const handleButtonClick = () => {
+    setShowInput(true);
+  };
 
   const bioRef = useRef<null | HTMLDivElement>(null);
 
@@ -20,12 +45,14 @@ const Home: NextPage = () => {
     }
   };
 
-  const prompt = `${bio}`;
+  const prompt = bio + "%%" + inputValue;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
+
+    console.log(prompt);
 
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -64,19 +91,51 @@ const Home: NextPage = () => {
   return (
     <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
       <Head>
-        <title>Twitter Bio Generator</title>
+        <title>Jst Ideas</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Openkey />
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-        <h1 className="sm:text-9xl text-[#efece6] text-4xl max-w-[708px] font-bold">
-          Jst Roast
+      <div>
+        {!showInput && (
+          <button
+            className="px-5 text-[#efece6] py-2 border border-solid border-[#00000033] rounded-full bg-[#ffffff26] shadow-[inset_0_1px_0_0_rgb(255,255,255,10%)] hover:shadow-2xl"
+            onClick={handleButtonClick}
+          >
+            OpenAI Key
+          </button>
+        )}
+        {showInput && (
+          <form
+            className="p-1.5 gap-1 rounded-full text-[#efece6] py-2 border border-solid border-[#00000033] rounded-full bg-[#ffffff26] shadow-[inset_0_1px_0_0_rgb(255,255,255,10%)] flex"
+            onSubmit={handleSubmit}
+          >
+            <input
+              className="w-full border-0 text-[#efece6] placeholder:text-[#aaa] bg-transparent px-3 py-2 rounded-full focus:outline-none focus:border-0"
+              id="input"
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder={"Enter OpenAI key"}
+            />
+            <button
+              className="bg-[#222] shadow-[inset_0_1px_0_0_rgb(255,255,255,10%)] border border-[#000] rounded-full text-white font-medium px-4 py-2 hover:bg-[#222] w-fit"
+              type="submit"
+            >
+              Save
+            </button>
+          </form>
+        )}
+      </div>
+      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:text sm:mt-20">
+        <h1 className="sm:text-9xl text-[#efece6] text-5xl max-w-[708px] font-bold">
+          Jst Ideas
         </h1>
         <div className="max-w-xl w-full">
           <div className="flex mt-5 items-center space-x-1">
             <p className="text-center w-full text-[#efece6] font-medium">
-              Save your OpenAI key, and then ask for your
+              <p className="text-lg">N&W has begun, welcome to S3 dear folks</p>
+              Check if your idea worth it, add your OpenAI key above and tell us
+              what your idea is right here 👇!
             </p>
           </div>
           <div className="p-1.5 gap-1 mt-5 rounded-full text-[#efece6] py-2 border border-solid border-[#00000033] rounded-full bg-[#333] shadow-[inset_0_1px_0_0_rgb(255,255,255,10%)] flex">
