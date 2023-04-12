@@ -112,7 +112,7 @@ const Home: NextPage = () => {
             <input
               className="w-full border-0 text-[#efece6] placeholder:text-[#aaa] bg-transparent px-3 py-2 rounded-full focus:outline-none focus:border-0"
               id="input"
-              type="text"
+              type="password"
               value={inputValue}
               onChange={handleInputChange}
               placeholder={"Enter OpenAI key"}

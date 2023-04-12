@@ -25,7 +25,7 @@ const handler = async (req: Request): Promise<Response> => {
       {
         role: "system",
         content:
-          "Generate a humorous and entertaining roast of the text of a website that I provide, a roast that will make me laugh out loud!. No more than 400 characters. Give me 1 recommendation to improve the website",
+          "Generate a humorous and entertaining roast of ideas that the user provide, a roast that will make me laugh out loud and be rude!. No more than 400 characters. Give me 1 recommendation to improve the idea",
       },
       { role: "user", content: value },
     ],
